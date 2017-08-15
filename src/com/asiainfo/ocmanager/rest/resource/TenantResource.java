@@ -2,6 +2,7 @@ package com.asiainfo.ocmanager.rest.resource;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -24,15 +25,22 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
@@ -290,7 +298,7 @@ public class TenantResource {
 				httpPost.addHeader("Content-type", "application/json");
 				httpPost.addHeader("Authorization", "bearer " + token);
 
-				StringEntity se = new StringEntity(reqBody);
+				StringEntity se = new StringEntity(reqBody,"UTF-8");
 				se.setContentType("application/json");
 				httpPost.setEntity(se);
 
@@ -366,7 +374,7 @@ public class TenantResource {
 				httpPost.addHeader("Content-type", "application/json");
 				httpPost.addHeader("Authorization", "bearer " + token);
 
-				StringEntity se = new StringEntity(reqBodyJson.toString());
+				StringEntity se = new StringEntity(reqBodyJson.toString(),"UTF-8");
 				se.setContentType("application/json");
 				httpPost.setEntity(se);
 
@@ -983,7 +991,7 @@ public class TenantResource {
 			httpPut.addHeader("Content-type", "application/json");
 			httpPut.addHeader("Authorization", "bearer " + token);
 
-			StringEntity se = new StringEntity(reqBodyStr);
+			StringEntity se = new StringEntity(reqBodyStr,"UTF-8");
 			se.setContentType("application/json");
 			httpPut.setEntity(se);
 
@@ -1030,7 +1038,7 @@ public class TenantResource {
 			httpPost.addHeader("Content-type", "application/json");
 			httpPost.addHeader("Authorization", "bearer " + token);
 
-			StringEntity se = new StringEntity(reqBodyStr);
+			StringEntity se = new StringEntity(reqBodyStr,"UTF-8");
 			se.setContentType("application/json");
 			httpPost.setEntity(se);
 
@@ -1152,8 +1160,9 @@ public class TenantResource {
 			httpPut.addHeader("Content-type", "application/json");
 			httpPut.addHeader("Authorization", "bearer " + token);
 
-			StringEntity se = new StringEntity(reqBodyJson.toString());
+			StringEntity se = new StringEntity(reqBodyJson.toString(),"UTF-8");
 			se.setContentType("application/json");
+			se.setContentEncoding("");
 			httpPut.setEntity(se);
 
 			CloseableHttpResponse response2 = httpclient.execute(httpPut);
@@ -1177,7 +1186,7 @@ public class TenantResource {
 		request.addHeader("Content-type", "application/json");
 		request.addHeader("Authorization", "bearer " + token);
 
-		StringEntity entity = new StringEntity(getJson(tenant).toString());
+		StringEntity entity = new StringEntity(getJson(tenant).toString(),"UTF-8");
 		entity.setContentType("application/json");
 		request.setEntity(entity);
 	}
