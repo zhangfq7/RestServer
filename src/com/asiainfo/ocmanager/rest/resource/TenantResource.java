@@ -1154,7 +1154,6 @@ public class TenantResource {
 
 			StringEntity se = new StringEntity(reqBodyJson.toString(),"UTF-8");
 			se.setContentType("application/json");
-			se.setContentEncoding("");
 			httpPut.setEntity(se);
 
 			CloseableHttpResponse response2 = httpclient.execute(httpPut);
