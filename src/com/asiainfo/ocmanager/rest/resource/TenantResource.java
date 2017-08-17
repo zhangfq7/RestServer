@@ -290,7 +290,7 @@ public class TenantResource {
 				httpPost.addHeader("Content-type", "application/json");
 				httpPost.addHeader("Authorization", "bearer " + token);
 
-				StringEntity se = new StringEntity(reqBody);
+				StringEntity se = new StringEntity(reqBody,"UTF-8");
 				se.setContentType("application/json");
 				httpPost.setEntity(se);
 
@@ -366,7 +366,7 @@ public class TenantResource {
 				httpPost.addHeader("Content-type", "application/json");
 				httpPost.addHeader("Authorization", "bearer " + token);
 
-				StringEntity se = new StringEntity(reqBodyJson.toString());
+				StringEntity se = new StringEntity(reqBodyJson.toString(),"UTF-8");
 				se.setContentType("application/json");
 				httpPost.setEntity(se);
 
@@ -983,7 +983,7 @@ public class TenantResource {
 			httpPut.addHeader("Content-type", "application/json");
 			httpPut.addHeader("Authorization", "bearer " + token);
 
-			StringEntity se = new StringEntity(reqBodyStr);
+			StringEntity se = new StringEntity(reqBodyStr,"UTF-8");
 			se.setContentType("application/json");
 			httpPut.setEntity(se);
 
@@ -1030,7 +1030,7 @@ public class TenantResource {
 			httpPost.addHeader("Content-type", "application/json");
 			httpPost.addHeader("Authorization", "bearer " + token);
 
-			StringEntity se = new StringEntity(reqBodyStr);
+			StringEntity se = new StringEntity(reqBodyStr,"UTF-8");
 			se.setContentType("application/json");
 			httpPost.setEntity(se);
 
@@ -1152,7 +1152,7 @@ public class TenantResource {
 			httpPut.addHeader("Content-type", "application/json");
 			httpPut.addHeader("Authorization", "bearer " + token);
 
-			StringEntity se = new StringEntity(reqBodyJson.toString());
+			StringEntity se = new StringEntity(reqBodyJson.toString(),"UTF-8");
 			se.setContentType("application/json");
 			httpPut.setEntity(se);
 
@@ -1177,7 +1177,7 @@ public class TenantResource {
 		request.addHeader("Content-type", "application/json");
 		request.addHeader("Authorization", "bearer " + token);
 
-		StringEntity entity = new StringEntity(getJson(tenant).toString());
+		StringEntity entity = new StringEntity(getJson(tenant).toString(),"UTF-8");
 		entity.setContentType("application/json");
 		request.setEntity(entity);
 	}
