@@ -75,13 +75,18 @@ public class GetFile {
         results.put("file","");
         results.put("msg","");
         List<String> userlist = (List)results.get("userlist");
+        DownloadResult dr = new DownloadResult();
         if(results.get("result").equals("")){
             //当keytab信息为""时，判断错误原因
             if(!userlist.contains(username)){
-                results.put("msg","The user is not exist");
+                dr.setResult("failed");
+                dr.setMessage("The user is not exist");
+                results.put("msg",dr);
                 return results;
             }else {
-                results.put("msg","Failed to obtain keytab information for this user,The information is empty");
+                dr.setResult("failed");
+                dr.setMessage("Failed to obtain keytab information for this user,The information is empty");
+                results.put("msg",dr);
                 return results;
             }
         }else{
