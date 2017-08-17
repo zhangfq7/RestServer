@@ -75,7 +75,7 @@ public class GetFile {
         results.put("file","");
         results.put("msg","");
         List<String> userlist = (List)results.get("userlist");
-        DownloadResult dr = new DownloadResult();
+        DownloadResult dr = new DownloadResult("","","404");
         if(results.get("result").equals("")){
             //当keytab信息为""时，判断错误原因
             if(!userlist.contains(username)){
