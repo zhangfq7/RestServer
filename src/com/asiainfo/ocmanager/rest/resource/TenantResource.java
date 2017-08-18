@@ -466,7 +466,10 @@ public class TenantResource {
 							Thread thread = new Thread(runnable);
 							thread.start();
 
-						}
+						}else{
+						    //not hadoop service like greenplum/mysql/neo4j,call dacp to sync info
+						    DacpAllResult.getAllResult(tenantId);
+                        }
 					}
 
 					return Response.ok().entity(bodyStr).build();
