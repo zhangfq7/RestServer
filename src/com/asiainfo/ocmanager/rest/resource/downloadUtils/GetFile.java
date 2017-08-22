@@ -43,18 +43,11 @@ public class GetFile {
         try {
             results = createFile(tanantid,username);
             results.put("filepaths",filepaths);
-            results.put("status","");
             if(isexists==true){
                 //用户非首次下载，将本地保存的该用户keytab文件返回给用户
                 File file = new File(filepaths);
                 results.put("file",file);
                 return results;
-            }
-            //判断返回状态
-            if(results.get("file").equals("")){
-                results.put("status","false");
-            }else{
-                results.put("status","true");
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -75,18 +68,23 @@ public class GetFile {
         results.put("file","");
         results.put("msg","");
         List<String> userlist = (List)results.get("userlist");
-        DownloadResult dr = new DownloadResult("","","404");
+        if(userlist==null){
+            userlist=new ArrayList<>();
+        }
+        DownloadResult dr = new DownloadResult();
         if(results.get("result").equals("")){
             //当keytab信息为""时，判断错误原因
             if(!userlist.contains(username)){
                 dr.setResult("failed");
+                dr.setCode("404");
                 dr.setMessage("The user is not exist");
-                results.put("msg",dr);
+                results.put("res",dr);
                 return results;
             }else {
                 dr.setResult("failed");
+                dr.setCode("404");
                 dr.setMessage("Failed to obtain keytab information for this user,The information is empty");
-                results.put("msg",dr);
+                results.put("res",dr);
                 return results;
             }
         }else{
@@ -112,6 +110,10 @@ public class GetFile {
                     fw.close();
                 }
             }
+            dr.setResult("success");
+            dr.setCode("200");
+            dr.setMessage("");
+            results.put("res",dr);
             results.put("file",file);
         }
         return results;

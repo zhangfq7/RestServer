@@ -1,5 +1,6 @@
 package com.asiainfo.ocmanager.rest.resource;
 
+import com.asiainfo.ocmanager.rest.resource.downloadUtils.DownloadResult;
 import com.asiainfo.ocmanager.rest.resource.downloadUtils.GetFile;
 
 import javax.ws.rs.GET;
@@ -20,23 +21,26 @@ public class KerberosResource {
 
     @GET
     @Path("getkeytab/{tenantId}/{username}")
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_OCTET_STREAM})
-    public Response getFiles(@PathParam("tenantId")String tenantId,@PathParam("username")String username){
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getKeytab(@PathParam("tenantId")String tenantId,@PathParam("username")String username){
         Map map = GetFile.getFile(tenantId,username);
-        String status = (String)map.get("status");
-        //通过status结果响应用户
-        if(status.equals("false")){
-            Response.ResponseBuilder responseBuilder = Response.ok(map.get("msg"));
-            responseBuilder.type("application/json");
-            Response response = responseBuilder.build();
-            return response;
-        }else{
-            Response.ResponseBuilder responseBuilder = Response.ok(map.get("file"));
-            responseBuilder.type("applicatoin/octet-stream");
-            responseBuilder.header("Content-Disposition", "attachment; filename="+((File)map.get("file")).getName());
-            responseBuilder.header("Content-Length", Long.toString(((File)map.get("file")).length()));
-            Response response = responseBuilder.build();
-            return response;
-        }
+        DownloadResult dr = (DownloadResult)map.get("res");
+        Response.ResponseBuilder responseBuilder = Response.ok();
+        responseBuilder.type("application/json");
+        Response response = responseBuilder.entity(dr).build();
+        return response;
+    }
+
+    @GET
+    @Path("getFile/{tenantId}/{username}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getFile(@PathParam("tenantId")String tenantId,@PathParam("username")String username){
+        Map map = GetFile.getFile(tenantId,username);
+        Response.ResponseBuilder responseBuilder = Response.ok(map.get("file"));
+        responseBuilder.type("applicatoin/octet-stream");
+        responseBuilder.header("Content-Disposition", "attachment; filename="+((File)map.get("file")).getName());
+        responseBuilder.header("Content-Length", Long.toString(((File)map.get("file")).length()));
+        Response response = responseBuilder.build();
+        return response;
     }
 }
