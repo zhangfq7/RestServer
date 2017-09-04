@@ -6,13 +6,13 @@ package com.asiainfo.ocmanager.rest.resource.downloadUtils;
 public class DownloadResult {
     private String result;
     private String msg;
-    private String Code;
+    private String code;
 
     public DownloadResult(){}
-    public DownloadResult(String result,String msg,String errorCode){
+    public DownloadResult(String result,String msg,String code){
         this.result=result;
         this.msg=msg;
-        this.Code=errorCode;
+        this.code=code;
     }
 
     public void setResult(String result){this.result = result;}
@@ -21,7 +21,7 @@ public class DownloadResult {
     public void setMessage(String msg){this.msg = msg;}
     public String getMessage(){return this.msg;}
 
-    public void setCode(String Code){this.Code = Code;}
-    public String getCode(){return this.Code;}
+    public void setCode(String code){this.code = code;}
+    public String getCode(){return this.code;}
 
 }

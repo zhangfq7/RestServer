@@ -158,17 +158,19 @@ public class GetKeytabFile {
                                     return results;
                                 }
                             }
-                            keys.next();
+//                            keys.next();
                         }
                     }
                 }
             }
         } catch (JSONException e) {
             logger.error(e.getMessage());
+            results.put("flag",false);
         }
         results.put("userlist",userlist);
         return  results;
     }
+
 
     /**
      * 生成新的keytab文件
