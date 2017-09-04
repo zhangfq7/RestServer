@@ -59,8 +59,11 @@ public class HdfsUtil {
         Quota spacequota = new Quota("storageSpaceQuota","","","","hdfs space quota");
         try {
             UserGroupInformation.loginUserFromKeytab(prop.getProperty("hadoop.kerberos.principal"),keytabPath);
+            System.out.println("----============-----");
             FileSystem fs = FileSystem.get(conf);
-            ContentSummary contentSum = fs.getContentSummary(new Path(path));
+            MyContentSummary mcs = new MyContentSummary();
+            ContentSummary contentSum = mcs.getContentSummary(new Path(path),fs);
+//            ContentSummary contentSum = fs.getContentSummary(new Path(path));
             //获取资源信息并封装
             long Quota = contentSum.getQuota();
             long FileCount = contentSum.getFileCount();
