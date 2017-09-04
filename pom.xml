@@ -275,7 +275,7 @@
           <scope>test</scope>
       </dependency>
 
-      <!-- dacp service broker-->
+      <!-- ocdp service broker-->
       <dependency>
           <groupId>com.asiainfo</groupId>
           <artifactId>com.asiainfo</artifactId>
