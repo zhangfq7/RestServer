@@ -140,7 +140,8 @@ public class quotaQuery {
             while (rs.next()) {
                 useplace = Long.valueOf(rs.getString(1));
             }
-            String used = String.valueOf(useplace);
+//            String used = String.valueOf(useplace);
+            String used = UnitConversion.unitConversion(useplace);
             volumeSize= new Quota("volumeSize","",used,"","greenplum database used Size");
             rs.close();
             st.close();
@@ -187,7 +188,6 @@ public class quotaQuery {
             MongoIterable<String> mongoIterables= mongoClient.listDatabaseNames();
             if(mongoIterables!=null && mongoIterables.first()!=null){
                 boolean flag = true;
-
                 for(String dbname:mongoIterables){
                     if(dbname.equals(databasename)){
                         flag = false;
@@ -197,13 +197,13 @@ public class quotaQuery {
                     throw new Exception("this databaseName does not exist!");
                 }
             }
-
             MongoDatabase database = mongoClient.getDatabase(databasename);
             for(Document colloctio:database.listCollections()){
                 useplace+=colloctio.toJson().getBytes().length;
             }
-            String used = String.valueOf(useplace);
-            volumSize= new Quota("volumeSize","",used+"(B)","","mongodb database used size");
+//            String used = String.valueOf(useplace);
+            String used = UnitConversion.unitConversion(useplace);
+            volumSize= new Quota("volumeSize","",used,"","mongodb database used size");
         }catch (Exception e){
             logger.info("quotaQuery getMongoQuota Exception "+e.getMessage());
             volumSize= new Quota("volumeSize","","-1","","mongodb database used size");

@@ -82,12 +82,16 @@ public class HdfsUtil {
             logger.info("spacequota:"+spaceQuota+"---------  spaceconsumed:"+spaceConsumed);
             if(spaceQuota==-1){
                 spacequota.setSize("");
-                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
+//                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
+                spacequota.setUsed(UnitConversion.unitConversion(spaceConsumed));
                 spacequota.setAvailable("");
             }else {
-                spacequota.setSize(String.valueOf(spaceQuota)+"(B)");
-                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
-                spacequota.setAvailable(String.valueOf(spaceQuota-spaceConsumed)+"(B)");
+//                spacequota.setSize(String.valueOf(spaceQuota)+"(B)");
+//                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
+//                spacequota.setAvailable(String.valueOf(spaceQuota-spaceConsumed)+"(B)");
+                spacequota.setSize(UnitConversion.unitConversion(spaceQuota));
+                spacequota.setUsed(UnitConversion.unitConversion(spaceConsumed));
+                spacequota.setAvailable(UnitConversion.unitConversion((spaceQuota-spaceConsumed)));
             }
         } catch (IOException e) {
             logger.error("IOException :" +e);
