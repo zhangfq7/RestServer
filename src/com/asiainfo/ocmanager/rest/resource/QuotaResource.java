@@ -81,7 +81,6 @@ public class QuotaResource {
   public Response getHdfsQuota(@Context HttpServletRequest request) {
       String path = request.getParameter("path");
       Map quota = quotaQuery.getHdfsQuota(path);
-
       return Response.ok().entity(quota).build();
   }
 
@@ -121,7 +120,6 @@ public class QuotaResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getKafkaQuota(@PathParam("serviceInstanceId") String instanceId) {
     Map quota = quotaQuery.getKafkaQuota(instanceId);
-
     return Response.ok().entity(quota).build();
   }
 
@@ -168,7 +166,6 @@ public class QuotaResource {
     @Path("dacp")
     @Produces(MediaType.APPLICATION_JSON)
     public Response syncToDacp(@Context HttpServletRequest request) {
-
         Logger logger = Logger.getLogger(QuotaResource.class);
         Map result = new HashMap<>();
         String req = request.getParameter("tanantIds");

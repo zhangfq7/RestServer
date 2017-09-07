@@ -19,7 +19,7 @@ public class MyContentSummary {
     public ContentSummary getContentSummary(Path f, FileSystem fs) throws IOException {
         FileStatus status = fs.getFileStatus(f);
         short num = status.getReplication();
-        logger.info("The replications is:"+num);
+//        logger.info("The replications is:"+num);
         if (status.isFile()) {
             // f is a file
             long length = status.getLen();
