@@ -158,7 +158,7 @@ public class GetKeytabFile {
                                     return results;
                                 }
                             }
-//                            keys.next();
+                            keys.next();
                         }
                     }
                 }
@@ -167,6 +167,7 @@ public class GetKeytabFile {
             logger.error(e.getMessage());
             results.put("flag",false);
         }
+        results.put("file","");
         results.put("userlist",userlist);
         return  results;
     }
