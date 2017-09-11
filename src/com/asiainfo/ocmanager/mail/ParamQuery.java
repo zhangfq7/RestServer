@@ -18,6 +18,9 @@ public class ParamQuery {
     public final static String GREENPLUM_HOST_PORT = "greenplum.host.port";
     public final static String MONGO_HOST = "mongodb.host";
     public final static String MONGO_PORT = "mongodb.port";
+    public final static String MONGO_AUTH_USER = "mongodb.auth.user";
+    public final static String MONGO_AUTH_PASSWD = "mongodb.auth.passwd";
+    public final static String MONGO_AUTH_DBNAME = "mongodb.auth.dbname";
     public final static String DACP_JAVA_SECURITY_KRB5_REALM = "dacp.java.security.krb5.realm";
     public final static String DACP_JAVA_SECURITY_KRB5_KDC = "dacp.java.security.krb5.kdc";
     public final static String DACP_HADOOP_SECURITY_AUTHENTICATION = "dacp.hadoop.security.authentication";
@@ -50,6 +53,9 @@ public class ParamQuery {
                                 map.put(SEND_MAIL_PASSWORD, prop.getProperty(SEND_MAIL_PASSWORD));
                                 map.put(MONGO_HOST,prop.getProperty(MONGO_HOST));
                                 map.put(MONGO_PORT,prop.getProperty(MONGO_PORT));
+                                map.put(MONGO_AUTH_USER,prop.getProperty(MONGO_AUTH_USER));
+                                map.put(MONGO_AUTH_PASSWD,prop.getProperty(MONGO_AUTH_PASSWD));
+                                map.put(MONGO_AUTH_DBNAME,prop.getProperty(MONGO_AUTH_DBNAME));
                                 map.put(GREENPLUM_HOST_PORT,prop.getProperty(GREENPLUM_HOST_PORT));
                                 map.put(BOOTSTRAP_SERVERS,prop.getProperty(BOOTSTRAP_SERVERS));
                                 map.put(DACP_HADOOP_SECURITY_AUTHENTICATION,DACP_HADOOP_SECURITY_AUTHENTICATION+"="+prop.getProperty(DACP_HADOOP_SECURITY_AUTHENTICATION));
