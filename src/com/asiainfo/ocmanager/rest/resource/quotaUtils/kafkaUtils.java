@@ -110,7 +110,8 @@ public class kafkaUtils {
                     logger.info("kafka topic partiton num"+pro);
                 }
                 if(Integer.valueOf(processList.get(0))>Integer.MAX_VALUE){throw new IOException("num is too large!!");}
-                partitionQuota= new Quota("partitionQuota","",String.valueOf(processList.get(0))+"(B)","","kafka topic partition used size");
+                partitionQuota= new Quota("partitionQuota","",UnitConversion.unitConversion(((long)Integer.parseInt(processList.get(0)))),"","kafka topic partition used size");
+//                partitionQuota= new Quota("partitionQuota","",String.valueOf(processList.get(0))+"(B)","","kafka topic partition used size");
                 input.close();
             }catch (Exception e){
                 logger.info("KafkaUtils getKafkaSpaceQuota IOException:"+e.getMessage());

@@ -59,8 +59,11 @@ public class HdfsUtil {
         Quota spacequota = new Quota("storageSpaceQuota","","","","hdfs space quota");
         try {
             UserGroupInformation.loginUserFromKeytab(prop.getProperty("hadoop.kerberos.principal"),keytabPath);
+            System.out.println("----============-----");
             FileSystem fs = FileSystem.get(conf);
-            ContentSummary contentSum = fs.getContentSummary(new Path(path));
+            MyContentSummary mcs = new MyContentSummary();
+            ContentSummary contentSum = mcs.getContentSummary(new Path(path),fs);
+//            ContentSummary contentSum = fs.getContentSummary(new Path(path));
             //获取资源信息并封装
             long Quota = contentSum.getQuota();
             long FileCount = contentSum.getFileCount();
@@ -79,12 +82,16 @@ public class HdfsUtil {
             logger.info("spacequota:"+spaceQuota+"---------  spaceconsumed:"+spaceConsumed);
             if(spaceQuota==-1){
                 spacequota.setSize("");
-                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
+//                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
+                spacequota.setUsed(UnitConversion.unitConversion(spaceConsumed));
                 spacequota.setAvailable("");
             }else {
-                spacequota.setSize(String.valueOf(spaceQuota)+"(B)");
-                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
-                spacequota.setAvailable(String.valueOf(spaceQuota-spaceConsumed)+"(B)");
+//                spacequota.setSize(String.valueOf(spaceQuota)+"(B)");
+//                spacequota.setUsed(String.valueOf(spaceConsumed)+"(B)");
+//                spacequota.setAvailable(String.valueOf(spaceQuota-spaceConsumed)+"(B)");
+                spacequota.setSize(UnitConversion.unitConversion(spaceQuota));
+                spacequota.setUsed(UnitConversion.unitConversion(spaceConsumed));
+                spacequota.setAvailable(UnitConversion.unitConversion((spaceQuota-spaceConsumed)));
             }
         } catch (IOException e) {
             logger.error("IOException :" +e);

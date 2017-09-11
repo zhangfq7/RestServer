@@ -9,6 +9,7 @@ import com.asiainfo.ocmanager.dacp.utils.DBUrlEnum;
 import com.asiainfo.ocmanager.dacp.utils.DbTypeEnum;
 import com.asiainfo.ocmanager.dacp.utils.DriverTypeEnum;
 import com.asiainfo.ocmanager.dacp.utils.KeyTabClient;
+import com.asiainfo.ocmanager.rest.resource.downloadUtils.GetKeytabFile;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -95,7 +96,8 @@ public class DacpForResourceUtil {
                         if (!"Unbound".equals(phase)) {
                             // only backing_service is hive ,then send to dacp ,or do nothing
                             if (!backingservice_name.toLowerCase().equals("hive")) continue;
-                            hadoopDBEntityAssign(backingservice_name, specJsonObj);
+//                            hadoopDBEntityAssign(backingservice_name, specJsonObj);
+                            hadoopDBEntityAssign(backingservice_name, specJsonObj,tenantId);
                             DBEntityAssign(instance_id, backingservice_name, driverclassname);
                         }
                     } else {// if backing service is not hadoop ecosytem,get credentials;including gp
@@ -107,7 +109,8 @@ public class DacpForResourceUtil {
                                 backingservice_name.toLowerCase().equals("redis"))
                                 continue;
                             JsonObject credentialsJsonObj = provisioningJsonObj.get("credentials").getAsJsonObject();
-                            assignForDBInfo(credentialsJsonObj, backingservice_name);
+//                            assignForDBInfo(credentialsJsonObj, backingservice_name);
+                            assignForDBInfo(credentialsJsonObj, backingservice_name,tenantId);
                         }
                         DBEntityAssign(instance_id, backingservice_name, driverclassname);
                     }
@@ -128,7 +131,7 @@ public class DacpForResourceUtil {
      * @Parameter backingservice_name is resource name ;  specJsonObj is resource link info
      * @returns void
      */
-    private static void hadoopDBEntityAssign(String backingservice_name, JsonObject specJsonObj) {
+    private static void hadoopDBEntityAssign(String backingservice_name, JsonObject specJsonObj,String tenantid) {
         JsonParser parser = new JsonParser();
         if (specJsonObj.get("binding").isJsonArray()) {
             JsonArray bindingJsonArray = specJsonObj.get("binding").getAsJsonArray();
@@ -141,7 +144,8 @@ public class DacpForResourceUtil {
 
             if (bindObj != null) {
                 JsonObject credentialJsonObj = bindObj.get("credentials").getAsJsonObject();
-                assignForDBInfo(credentialJsonObj, backingservice_name);
+//                assignForDBInfo(credentialJsonObj, backingservice_name);
+                assignForDBInfo(credentialJsonObj, backingservice_name,tenantid);
             }
 
         }
@@ -239,7 +243,8 @@ public class DacpForResourceUtil {
      * @Parameter credentialsJsonObj is resource credential JsonObject  ;  backingservice_name is resource name ;
      * @returns void
      */
-    private static void assignForDBInfo(JsonObject credentialsJsonObj, String backingservice_name) {
+//    private static void assignForDBInfo(JsonObject credentialsJsonObj, String backingservice_name,String tenantid)
+    private static void assignForDBInfo(JsonObject credentialsJsonObj, String backingservice_name,String tenantid) {
         if (credentialsJsonObj.get("username") != null) {
             username = credentialsJsonObj.get("username").getAsString();//username
         }
@@ -255,9 +260,11 @@ public class DacpForResourceUtil {
             if (credentialsJsonObj.get("Hive database") != null) {
                 String hiveDatabase = credentialsJsonObj.get("Hive database").getAsString();
                 databasename = hiveDatabase.substring(0, hiveDatabase.indexOf(":"));
+                keyTabFileCreateAndDeploy(tenantid);
             }
             //now only hive do this operation
-            keyTabFileCreateAndDeploy(credentialsJsonObj);
+//            keyTabFileCreateAndDeploy(credentialsJsonObj);
+//            keyTabFileCreateAndDeploy(tenantid);
         } else {
             if (credentialsJsonObj.get("name") != null) {
                 databasename = credentialsJsonObj.get("name").getAsString();
@@ -276,27 +283,35 @@ public class DacpForResourceUtil {
      * @Parameter credentialsJsonObj is resource credential JsonObject
      * @returns void
      */
-    private static void keyTabFileCreateAndDeploy(JsonObject credentialsJsonObj) {
+//    private static void keyTabFileCreateAndDeploy(JsonObject credentialsJsonObj) {
+    private static void keyTabFileCreateAndDeploy(String tenantid) {
         Process process = null;
         List<String> processList = new ArrayList<String>();
         BufferedReader input = null;
         Boolean flag = true;
         try {
             //begin to create Keytab file
-            String keyTabStr = credentialsJsonObj.get("keytab").getAsString();
-            String keyTabFilePath = propdacp.getProperty("keytab.srcpath");
+//            String keyTabStr = credentialsJsonObj.get("keytab").getAsString();
+            String[] usernames = username.split("@");
+            String user = usernames[0];
+            Map result = GetKeytabFile.returnResult(tenantid,user);
+            logger.info("result:" +result);
+            String src_file = (String)result.get("filepaths");
+            logger.info("src_file"+src_file);
+            flag = (boolean)result.get("flag");
+            logger.info("flag"+flag);
+            String keyTabFilePath = propdacp.getProperty("keytab.path");
             String keyTabFileDesPath = propdacp.getProperty("keytab.destpath");
             String keyTabFileType = propdacp.getProperty("keytab.type");
             String keyTabFileName = username + keyTabFileType;
-            String src_file = keyTabFilePath + keyTabFileName;
             String dest_file = keyTabFileDesPath + keyTabFileName;
             String tag = "dacp";
-            if (credentialsJsonObj.get("keytab") != null) {
-                flag = KeyTabClient.CreatKeyTab(keyTabStr, keyTabFilePath, keyTabFileName);
-                logger.info("keyTabStr: " + keyTabStr + "\nkeyTabFilePath: " + keyTabFilePath + " \ncreateKeyTabFlag:"+flag);
-            }
+//            if (credentialsJsonObj.get("keytab") != null) {
+//                flag = KeyTabClient.CreatKeyTab(keyTabStr, keyTabFilePath, keyTabFileName);
+//                logger.info("keyTabStr: " + keyTabStr + "\nkeyTabFilePath: " + keyTabFilePath + " \ncreateKeyTabFlag:"+flag);
+//            }
             if (flag) {
-                //begin to deploy Keytab file
+//                begin to deploy Keytab file
                 String shellClassPath = new DacpForResourceUtil().getClass().getResource("/").getPath();
                 String shellPath = shellClassPath.substring(0, shellClassPath.length() - 8) + "conf/deployKeytab/";
                 String execStr = "sh " + shellPath + propdacp.getProperty("deploy.sh.name") + " " + src_file + " " + dest_file + " " + tag + "\n";

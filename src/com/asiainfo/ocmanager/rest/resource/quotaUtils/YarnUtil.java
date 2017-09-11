@@ -31,8 +31,8 @@ public class YarnUtil {
         String yarnurl = AmbariUtil.getUrl("yarn");
         String restresult = "";
         String yarnresturl = "http://"+yarnurl+"/ws/v1/cluster/scheduler";
-        Quota memoryquota = new Quota("yarnQueueQuota","","","","queue memory quota(MB)");
-        Quota vcoresquota = new Quota("queueVcoreQuota","","","","queue vcore qutoa(MB)");
+        Quota memoryquota = new Quota("yarnQueueQuota","","","","queue memory quota");
+        Quota vcoresquota = new Quota("queueVcoreQuota","","","","queue vcore qutoa");
         //通过yarn rest api获取资源用量信息
         HttpURLConnection conn = null;
         BufferedReader reader;
@@ -91,9 +91,12 @@ public class YarnUtil {
                     String resourcesUsed = json6.getString("resourcesUsed");
                     JSONObject json7 = new JSONObject(resourcesUsed);
                     String memory = json7.getString("memory");
-                    int memoryGb = Integer.valueOf(memory);
+                    logger.info(memory);
+                    long memoryGb = Long.parseLong(memory)*1024*1024;
+//                    long memoryGb = (long)(Integer.valueOf(memory)*1024*1024);
                     memoryquota.setName("queueMemoryQuota");
-                    memoryquota.setUsed(String.valueOf(memoryGb)+"(MB)");
+//                    memoryquota.setUsed(String.valueOf(memoryGb)+"(MB)");
+                    memoryquota.setUsed(UnitConversion.unitConversion(memoryGb));
                     String vCores = json7.getString("vCores");
                     vcoresquota.setName("queueVcoreQuota");
                     vcoresquota.setUsed(vCores);
