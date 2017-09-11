@@ -26,7 +26,7 @@ public class ParamQuery {
     public final static String DACP_HADOOP_SECURITY_AUTHENTICATION = "dacp.hadoop.security.authentication";
     public final static String DACP_KEYTAB_FILE = "dacp.keytab.file";
     public final static String DACP_KERBEROS_PRINCIPAL = "dacp.kerberos.principal";
-    public final static String BOOTSTRAP_SERVERS = "bootstrap.servers";1
+    public final static String BOOTSTRAP_SERVERS = "bootstrap.servers";
 
 
 
