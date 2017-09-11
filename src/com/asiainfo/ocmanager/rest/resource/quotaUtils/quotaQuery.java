@@ -6,6 +6,8 @@ import java.util.*;
 import com.asiainfo.ocmanager.mail.ParamQuery;
 import com.asiainfo.ocmanager.persistence.model.Quota;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.*;
 import org.apache.log4j.Logger;
 import org.bson.Document;
@@ -182,25 +184,28 @@ public class quotaQuery {
         try {
             String host = ParamQuery.getCFProperties().get(ParamQuery.MONGO_HOST);
             String port = ParamQuery.getCFProperties().get(ParamQuery.MONGO_PORT);
-            MongoClient mongoClient = new MongoClient(host, Integer.valueOf(port));
+            String authUser = ParamQuery.getCFProperties().get(ParamQuery.MONGO_AUTH_USER);
+            String authPassWd = ParamQuery.getCFProperties().get(ParamQuery.MONGO_AUTH_PASSWD);
+            String authDbname = ParamQuery.getCFProperties().get(ParamQuery.MONGO_AUTH_DBNAME);
+            MongoClient mongoClient = null;
+            //IP port
+            ServerAddress addr = new ServerAddress(host, Integer.valueOf(port));
+            List<ServerAddress> seeds = new ArrayList<ServerAddress>();
+            seeds.add(addr);
 
-            MongoIterable<String> mongoIterables= mongoClient.listDatabaseNames();
-            if(mongoIterables!=null && mongoIterables.first()!=null){
-                boolean flag = true;
+            // 用户名 数据库 密码
+            MongoCredential credential = MongoCredential.createCredential(authUser, authDbname, authPassWd.toCharArray());
+            List<MongoCredential> credentialList = new ArrayList<MongoCredential>();
+            credentialList.add(credential);
 
-                for(String dbname:mongoIterables){
-                    if(dbname.equals(databasename)){
-                        flag = false;
-                    }
-                }
-                if(flag){
-                    throw new Exception("this databaseName does not exist!");
-                }
-            }
+            mongoClient = new MongoClient(seeds,credentialList);
 
             MongoDatabase database = mongoClient.getDatabase(databasename);
-            for(Document colloctio:database.listCollections()){
-                useplace+=colloctio.toJson().getBytes().length;
+
+            if(database!=null && database.listCollections()!=null){
+                for(Document colloctio:database.listCollections()){
+                    useplace+=colloctio.toJson().getBytes().length;
+                }
             }
             String used = String.valueOf(useplace);
             volumSize= new Quota("volumeSize","",used+"(B)","","mongodb database used size");
