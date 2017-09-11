@@ -142,7 +142,8 @@ public class quotaQuery {
             while (rs.next()) {
                 useplace = Long.valueOf(rs.getString(1));
             }
-            String used = String.valueOf(useplace);
+            //String used = String.valueOf(useplace);
+            String used = UnitConversion.unitConversion(useplace);
             volumeSize= new Quota("volumeSize","",used,"","greenplum database used Size");
             rs.close();
             st.close();
