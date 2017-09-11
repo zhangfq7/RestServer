@@ -132,8 +132,6 @@ public class GetKeytabFile {
                             continue;
                         }
                         JSONObject credentialsJson = new JSONObject(credentials);
-                        Iterator keys = credentialsJson.keys();
-                        while (keys.hasNext()){
                             String principal = credentialsJson.getString("username");
                             String password = credentialsJson.getString("password");
                             String keytabFilePath = createKeyTabFilePath(username);
@@ -156,9 +154,7 @@ public class GetKeytabFile {
                                     results.put("userlist",userlist);
                                     results.put("flag",false);
                                     return results;
-                                }
                             }
-                            keys.next();
                         }
                     }
                 }
