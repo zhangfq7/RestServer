@@ -13,20 +13,19 @@ public class UnitConversion {
     public static String unitConversion(long olddata){
 
         String newdata = new String();
-        if(olddata>0){
-            if(olddata/1024>1){
-                if(olddata/1024/1024>1){
-                    if(olddata/1024/1024/1024>1){
-                        newdata = String.valueOf(olddata/1024/1024/1024)+"(GB)";
-                        return newdata;
-                    }
-                    newdata = String.valueOf(olddata/1024/1024)+"(MB)";
+        if(olddata>1024){
+            long kbdata = olddata/1024;
+            if(kbdata>1024){
+                long mbdata = kbdata/1024;
+                if(mbdata>1024){
+                    long gbdata = mbdata/1024;
+                    newdata = String.valueOf(gbdata)+"(GB)";
                     return newdata;
                 }
-                newdata = String.valueOf(olddata/1024)+"(KB)";
+                newdata = String.valueOf(mbdata)+"(MB)";
                 return newdata;
             }
-            newdata = String.valueOf(olddata)+"(B)";
+            newdata = String.valueOf(kbdata)+"(KB)";
             return newdata;
         }
         return String.valueOf(olddata)+"(B)";
