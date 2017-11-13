@@ -528,9 +528,29 @@ public class TenantResource {
 			JsonObject provisioning = serviceInstanceJson.getAsJsonObject().getAsJsonObject("spec")
 					.getAsJsonObject("provisioning");
 
+            //get instance_id by yanls
+            String instanceId = "";
+            if(provisioning.get("parameters").getAsJsonObject().get("instance_id")!=null){
+                logger.info("updateServiceInstanceInTenant -> get instance_id from df provisioning");
+                instanceId = provisioning.get("parameters").getAsJsonObject().get("instance_id").getAsString();
+            }else{
+                //get from database
+                logger.info("updateServiceInstanceInTenant -> df do not have instance_id, now get instance_id from ocm mysql");
+                List<ServiceInstance>serviceInstanceList = ServiceInstancePersistenceWrapper.getServiceInstancesInTenant(tenantId);
+                for(ServiceInstance serviceInstance : serviceInstanceList){
+                    if(serviceInstance.getInstanceName().equals(instanceName)){
+                        instanceId = serviceInstance.getId();
+                    }
+                }
+            }
+
 			// parse the input parameters json
 			JsonElement parameterJon = new JsonParser().parse(parametersStr);
 			JsonObject parameterObj = parameterJon.getAsJsonObject().getAsJsonObject("parameters");
+
+            //add instance_id into parameterObj by yanls
+            logger.info("updateServiceInstanceInTenant -> get instance_id is: "+instanceId);
+            parameterObj.addProperty("instance_id",instanceId);
 
 			// check whether parameters format is legal
 			try {
