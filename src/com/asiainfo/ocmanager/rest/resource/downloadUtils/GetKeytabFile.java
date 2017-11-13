@@ -57,6 +57,15 @@ public class GetKeytabFile {
             return results;
         }
         results = getKeytabFile(tanantid,username);
+        if(results.containsKey("itemsnull")){
+            DownloadResult dr = new DownloadResult();
+            dr.setResult("failed");
+            dr.setCode("404");
+            dr.setMessage("此基线下不存在该用户，请选择正确的基线！");
+            results.put("res",dr);
+            results.put("flag",false);
+            return results;
+        }
         List userlist = (List)results.get("userlist");
         DownloadResult dr = new DownloadResult();
         if(userlist==null){
@@ -67,13 +76,13 @@ public class GetKeytabFile {
             if(!userlist.contains(username)) {
                 dr.setResult("failed");
                 dr.setCode("404");
-                dr.setMessage("The user is not exist");
+                dr.setMessage("用户未绑定到当前服务列表。");
                 results.put("res", dr);
                 return results;
             }else{
                 dr.setResult("failed");
                 dr.setCode("404");
-                dr.setMessage("create file failed");
+                dr.setMessage("文件创建失败！");
                 results.put("res", dr);
                 return results;
             }
@@ -104,6 +113,7 @@ public class GetKeytabFile {
             String items = resourceJson.getString("items");
             //判断items信息是否可用
             if(items.equals("[]")){
+                results.put("itemsnull","The tenant does not exist for this user, please choose the correct baseline");
                 return results;
             }
             JSONArray itemsJson = new JSONArray(items);

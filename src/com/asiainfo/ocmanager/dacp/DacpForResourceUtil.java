@@ -259,7 +259,7 @@ public class DacpForResourceUtil {
         if (DbTypeEnum.getDbFlagEnum(backingservice_name.toLowerCase()).equals("true")) {
             if (credentialsJsonObj.get("Hive database") != null) {
                 String hiveDatabase = credentialsJsonObj.get("Hive database").getAsString();
-                databasename = hiveDatabase.substring(0, hiveDatabase.indexOf(":"));
+                databasename = hiveDatabase;
                 keyTabFileCreateAndDeploy(tenantid);
             }
             //now only hive do this operation
