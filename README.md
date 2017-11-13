@@ -62,7 +62,7 @@ tenant.monitor.period=3600
 tenant.monitor.url=http://<中信云rest api IP or 主机名>:<中信云rest api 端口>
 ```
 
-12.Select the correct configuration, before starting the service, select the production environment or test environment,Open the configuration item of the annotation.
+12.Select the correct configuration, before starting the service, select the online environment or test environment,Open the configuration item of the annotation.
 
 go to __<TOMCAT_HOME>/webapps/ocmanager/WEB-INF/conf__ , edit the config.properties
 go to __<TOMCAT_HOME>/webapps/ocmanager/WEB-INF/conf__ , edit the dataFoundry.properties
